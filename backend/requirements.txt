@@ -1,0 +1,5 @@
+flask
+flask-cors
+tenseal
+numpy
+gunicorn==20.1.0

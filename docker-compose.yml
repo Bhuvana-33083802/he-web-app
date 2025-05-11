@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - "5000:5000"
+    networks:
+      - he_network
+    environment:
+      - FLASK_ENV=production
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - he_network
+    environment:
+      - NODE_ENV=production
+    command: ["npm", "start"]
+
+networks:
+  he_network:
+    driver: bridge
