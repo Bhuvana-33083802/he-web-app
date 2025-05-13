@@ -3,3 +3,4 @@ flask-cors
 tenseal
 numpy
 gunicorn==20.1.0
+flask_sqlalchemy
