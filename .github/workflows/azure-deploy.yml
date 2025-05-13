@@ -3,15 +3,17 @@ name: Azure Web App CI/CD
 on:
   push:
     branches:
-      - main  # Trigger deployment on push to main branch
+      - main  # Trigger deployment on push to the main branch
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
+    environment: production  # Use the "production" environment created in GitHub
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  # Checkout the code from GitHub
+      uses: actions/checkout@v2  # This checks out your code from GitHub
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1  # Set up Docker Buildx to build multi-platform Docker images
@@ -24,9 +26,12 @@ jobs:
 
     - name: Build and Push Docker images
       run: |
+        # Build and push the React frontend Docker image
         docker build -t ${{ secrets.DOCKER_USERNAME }}/react-frontend ./frontend
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-backend ./backend
         docker push ${{ secrets.DOCKER_USERNAME }}/react-frontend
+        
+        # Build and push the Flask backend Docker image
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-backend ./backend
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-backend
 
     - name: Login to Azure
@@ -34,9 +39,12 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy to Azure Web App
+    - name: Deploy to Azure Web App - React Frontend
       run: |
-        # Deploy React frontend to Azure Web App
-        az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name myReactApp --deployment-container-image-name ${{ secrets.DOCKER_USERNAME }}/react-frontend
-        # Deploy Flask backend to Azure Web App
-        az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name myFlaskApp --deployment-container-image-name ${{ secrets.DOCKER_USERNAME }}/flask-backend
+        # Deploy React frontend to Azure Web App (he-frontend)
+        az webapp config container set --name he-frontend --resource-group HE-WebApp --docker-custom-image-name ${{ secrets.DOCKER_USERNAME }}/react-frontend:latest
+
+    - name: Deploy to Azure Web App - Flask Backend
+      run: |
+        # Deploy Flask backend to Azure Web App (HE-backend)
+        az webapp config container set --name HE-backend --resource-group HE-WebApp --docker-custom-image-name ${{ secrets.DOCKER_USERNAME }}/flask-backend:latest
