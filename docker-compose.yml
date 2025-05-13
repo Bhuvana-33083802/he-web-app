@@ -21,8 +21,8 @@ services:
     networks:
       - he_network
     environment:
-      - NODE_ENV=production
-    command: ["npm", "start"]
+      - NODE_ENV=production # Use this for production
+    command: ["nginx", "-g", "daemon off;"] # Serve static files via Nginx
 
 networks:
   he_network:
