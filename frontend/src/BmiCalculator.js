@@ -10,6 +10,9 @@ function BmiCalculator() {
   const [encryptedData, setEncryptedData] = useState(null);
   const [decryptedBmi, setDecryptedBmi] = useState(null);
 
+  const API_BASE =
+    "https://he-backend-b8fsftgseseqdbch.ukwest-01.azurewebsites.net";
+
   // Helper: Determine BMI category
   const getBmiCategory = (bmi) => {
     if (bmi < 18.5) return "Underweight";
@@ -42,7 +45,7 @@ function BmiCalculator() {
   const handleEncryptBMI = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/encrypt_bmi",
+        `${API_BASE}/api/encrypt_bmi`,
         { weight: parseInt(weight), height: parseInt(height) },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -60,7 +63,7 @@ function BmiCalculator() {
     }
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/decrypt_bmi",
+        `${API_BASE}/api/decrypt_bmi`,
         {
           encrypted_weight: encryptedData.encrypted_weight,
           encrypted_height: encryptedData.encrypted_height,
@@ -70,7 +73,7 @@ function BmiCalculator() {
       const bmi = response.data.decrypted_bmi;
       const category = getBmiCategory(bmi);
       // Save record
-      await axios.post("http://127.0.0.1:5000/api/save_bmi", {
+      await axios.post(`${API_BASE}/api/save_bmi`, {
         name: name || "Anonymous",
         weight: parseInt(weight),
         height: parseInt(height),

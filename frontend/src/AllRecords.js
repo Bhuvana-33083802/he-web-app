@@ -5,13 +5,16 @@ import axios from "axios";
 function AllRecords() {
   const [records, setRecords] = useState([]);
 
+  const API_BASE =
+    "https://he-backend-b8fsftgseseqdbch.ukwest-01.azurewebsites.net";
+
   useEffect(() => {
     fetchRecords();
   }, []);
 
   const fetchRecords = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/api/bmi_records");
+      const res = await axios.get(`${API_BASE}/api/bmi_records`);
       setRecords(res.data);
     } catch (error) {
       console.error("Error fetching records:", error);

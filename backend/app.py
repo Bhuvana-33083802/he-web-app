@@ -9,7 +9,8 @@ from cryptography.fernet import Fernet
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "methods": ["POST", "OPTIONS"]}})
+CORS(app, resources={r"/api/*": {"origins": ["https://he-frontend-guf8fpesaxgtf7d0.ukwest-01.azurewebsites.net"], "methods": ["POST", "OPTIONS"]}})
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bmi_records.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
