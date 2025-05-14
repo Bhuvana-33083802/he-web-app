@@ -28,7 +28,7 @@ jobs:
 
       - name: Zip React build
         run: |
-          cd frontend/build
+          cd frontend
           zip -r ../../release.zip .
 
       - name: Upload artifact
