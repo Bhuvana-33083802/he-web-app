@@ -19,19 +19,15 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Install and Build React App
+      - name: Install dependencies and build
         working-directory: frontend
         run: |
           npm install
           npm run build
-
-      - name: Move build content to root
-        run: |
-          cp -r frontend/build/* .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: "HE-Frontend"
           slot-name: "Production"
-          package: .
+          package: frontend/build
