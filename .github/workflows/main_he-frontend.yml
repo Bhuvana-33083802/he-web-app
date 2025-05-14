@@ -25,9 +25,13 @@ jobs:
           npm install
           npm run build
 
+      - name: Move build content to root
+        run: |
+          cp -r frontend/build/* .
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: "HE-Frontend"
           slot-name: "Production"
-          package: frontend/build
+          package: .
